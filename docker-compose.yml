@@ -24,7 +24,7 @@ services:
       - ./data/drone/:/var/lib/drone
     environment:
       - DRONE_OPEN=true
-      - DRONE_SERVER_HOST=${DRONE_SERVER_HOST}:${DRONE_SERVER_PORT}
+      - DRONE_SERVER_HOST=${DRONE_SERVER_HOST}
       - DRONE_DEBUG=true
       - DRONE_TLS_AUTOCERT=false
       - DRONE_GIT_ALWAYS_AUTH=false
