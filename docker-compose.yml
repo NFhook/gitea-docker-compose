@@ -6,52 +6,10 @@ services:
     environment:
       TZ: Asia/Shanghai
     volumes:
-      - ./data/gitea:/data
+      - ./gitea:/data
     restart: always
     networks:
       - default
     ports:
       - "${GITEA_SSH_PORT}:22"
       - "${GITEA_WEB_PORT}:3000"
-
-  drone-server:
-    image: drone/drone:1.3.0
-    container_name: drone-server
-    ports:
-      - "${DRONE_SERVER_PORT}:80"
-    volumes:
-      - ./drone/docker.sock:/var/run/docker.sock
-      - ./data/drone/:/var/lib/drone
-    environment:
-      - DRONE_OPEN=true
-      - DRONE_SERVER_HOST=${DRONE_SERVER_HOST}
-      - DRONE_DEBUG=true
-      - DRONE_TLS_AUTOCERT=false
-      - DRONE_GIT_ALWAYS_AUTH=false
-      # - DRONE_GOGS=true
-      # - DRONE_GOGS_SKIP_VERIFY=false
-      # - DRONE_GOGS_SERVER=http://10.3.0.201:3000
-      - DRONE_GITEA_SERVER=${GITEA_SERVER}
-      # - DRONE_PROVIDER=gogs
-      - DRONE_SERVER_PROTO=http
-      - DRONE_RPC_SECRET=7b4eb5caee376cf81a2fcf7181e66175
-      # - DRONE_USER_CREATE=username:alic,admin:true
-      - DRONE_DATABASE_DATASOURCE=/var/lib/drone/drone.sqlite
-      - DRONE_DATABASE_DRIVER=sqlite3
-      - TZ=Asia/Shanghai
-    restart: always
-
-  drone-agent:
-    image: drone/agent:1.3.0
-    container_name: drone-agent
-    depends_on:
-      - drone-server
-    volumes:
-      - ./drone/docker.sock:/var/run/docker.sock
-    environment:
-      - DRONE_RPC_SERVER=${DRONE_RPC_SERVER}
-      - DRONE_RPC_SECRET=7b4eb5caee376cf81a2fcf7181e66175
-      - DRONE_RUNNER_CAPACITY=2
-      - DRONE_DEBUG=true
-      - TZ=Asia/Shanghai
-    restart: always
